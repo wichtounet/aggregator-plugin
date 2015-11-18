@@ -11,7 +11,7 @@ public class AggregatorWidget extends AbstractRubyTemplate implements RubyRailsW
 
   @Override
   public String getTitle() {
-    return "Aggregator";
+    return "Global Metrics";
   }
 
   @Override
