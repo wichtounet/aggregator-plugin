@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>aggregate-plugin</artifactId>
+  <groupId>org.ihateruby.aggregator</groupId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>sonar-plugin</packaging>
+
+  <name>Aggregator</name>
+
+  <licenses>
+    <license>
+      <name>MIT</name>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>wichtounet</id>
+      <name>Baptiste Wicht</name>
+    </developer>
+  </developers>
+
+  <properties>
+    <sonar.version>4.5.1</sonar.version>
+    <sonar.pluginClass></sonar.pluginClass>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <version>${sonar.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+      <plugins>
+          <plugin>
+              <groupId>org.codehaus.sonar</groupId>
+              <artifactId>sonar-packaging-maven-plugin</artifactId>
+              <version>1.7</version>
+              <extensions>true</extensions>
+              <configuration>
+                  <pluginKey>aggregator</pluginKey>
+                  <pluginClass>org.ihateruby.aggregator.AggregatorPlugin</pluginClass>
+                  <pluginName>Aggregator</pluginName>
+                  <pluginDescription>Aggregator</pluginDescription>
+              </configuration>
+          </plugin>
+      </plugins>
+  </build>
+</project>

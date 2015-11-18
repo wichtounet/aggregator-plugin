@@ -1,0 +1,36 @@
+<%
+  containerId = 'aggregator_widget_global' + widget.id.to_s
+  title = 'Aggregator'
+%>
+
+<div id="<%= containerId %>">
+  <h3 style="margin-bottom: 5px;"><%= title -%></h3>
+  <div id="<%= containerId %>-content">
+  </div>
+</div>
+
+<script>
+(function () {
+    var queryParams = [
+        'format=json',
+        'metrics=ncloc'
+    ];
+    var query = queryParams.join('&');
+    var url = baseUrl + '/api/resources?' + query;
+
+    jQuery.ajax({
+        type: "GET",
+        url: url,
+        dataType:"json",
+        success: function(data, textStatus, jqXHR) {
+            var ids = "";
+
+            jQuery.each(data, function(index, element) {
+                ids = ids + element.id;
+            });
+
+            jQuery("#<%= containerId %>-content").html(ids);
+        }
+    });
+})();
+</script>
