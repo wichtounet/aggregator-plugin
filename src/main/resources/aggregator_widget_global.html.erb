@@ -1,11 +1,54 @@
-<%
-  containerId = 'aggregator_widget_global' + widget.id.to_s
-  title = 'Aggregator'
-%>
+<div class="widget-title"><a>Global Metrics</a></div>
 
-<div id="<%= containerId %>">
-    <div class="widget-title"><%= title -%></div>
-    <div id="<%= containerId %>-content"></div>
+<div class="widget-row widget-row-x">
+    <div class="widget-span widget-span-3-5">
+        <div class="widget-measure-container">
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Projects</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_projects">0.0</span></a>
+            </span>
+            </p>
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Files</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_files">0.0</span></a>
+            </span>
+            </p>
+        </div>
+    </div>
+    <div class="widget-span widget-span-3-5">
+        <div class="widget-measure-container">
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Lines of code</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_loc">0.0</span></a>
+            </span>
+            </p>
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Lines</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_lines">0.0</span></a>
+            </span>
+            </p>
+        </div>
+    </div>
+    <div class="widget-span widget-span-5">
+        <div class="widget-measure-container">
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Functions</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_functions">0.0</span></a>
+            </span>
+            </p>
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Classes</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_classes">0.0</span></a>
+            </span>
+            </p>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -49,16 +92,12 @@
                 });
             });
 
-            var content =
-                "Projects: " + projects + "<br />"
-                + "Lines of code: " + ncloc + "<br />"
-                + "Lines: " + lines + "<br />"
-                + "Files: " + files + "<br />"
-                + "Classes: " + classes + "<br />"
-                + "Functions: " + functions + "<br />"
-                ;
-
-            jQuery("#<%= containerId %>-content").html(content);
+            jQuery("#aggregate_projects").html("" + projects);
+            jQuery("#aggregate_loc").html("" + ncloc);
+            jQuery("#aggregate_functions").html("" + functions);
+            jQuery("#aggregate_files").html("" + files);
+            jQuery("#aggregate_classes").html("" + classes);
+            jQuery("#aggregate_lines").html("" + lines);
         }
     });
 })();
