@@ -4,16 +4,15 @@
 %>
 
 <div id="<%= containerId %>">
-  <h3 style="margin-bottom: 5px;"><%= title -%></h3>
-  <div id="<%= containerId %>-content">
-  </div>
+    <div class="widget-title"><%= title -%></div>
+    <div id="<%= containerId %>-content"></div>
 </div>
 
 <script>
 (function () {
     var queryParams = [
         'format=json',
-        'metrics=ncloc'
+        'metrics=ncloc,files,lines,classes,functions'
     ];
     var query = queryParams.join('&');
     var url = baseUrl + '/api/resources?' + query;
@@ -23,13 +22,43 @@
         url: url,
         dataType:"json",
         success: function(data, textStatus, jqXHR) {
-            var ids = "";
+            var projects = 0;
+            var ncloc = 0.0;
+            var lines = 0.0;
+            var files = 0.0;
+            var classes = 0.0;
+            var functions = 0.0;
 
+            //Iterate over the projects
             jQuery.each(data, function(index, element) {
-                ids = ids + element.id;
+                projects = projects + 1;
+
+                //Gather the values
+                jQuery.each(element.msr, function(msr_index, msr_element){
+                    if (msr_element.key == "ncloc"){
+                        ncloc = ncloc + msr_element.val;
+                    } else if (msr_element.key == "lines"){
+                        lines = lines + msr_element.val;
+                    } else if (msr_element.key == "files"){
+                        files = files + msr_element.val;
+                    } else if (msr_element.key == "classes"){
+                        classes = classes + msr_element.val;
+                    } else if (msr_element.key == "functions"){
+                        functions = functions + msr_element.val;
+                    }
+                });
             });
 
-            jQuery("#<%= containerId %>-content").html(ids);
+            var content =
+                "Projects: " + projects + "<br />"
+                + "Lines of code: " + ncloc + "<br />"
+                + "Lines: " + lines + "<br />"
+                + "Files: " + files + "<br />"
+                + "Classes: " + classes + "<br />"
+                + "Functions: " + functions + "<br />"
+                ;
+
+            jQuery("#<%= containerId %>-content").html(content);
         }
     });
 })();
