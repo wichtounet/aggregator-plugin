@@ -15,6 +15,6 @@ import org.sonar.api.SonarPlugin;
 public class AggregatorPlugin extends SonarPlugin {
     @Override
     public List getExtensions() {
-        return Arrays.asList(AggregatorWidget.class);
+        return Arrays.asList(AggregatorWidget.class, AggregatorListWidget.class);
     }
 }

@@ -1,0 +1,126 @@
+<div class="widget-title"><a>Global Metrics</a></div>
+
+<div class="widget-row widget-row-x">
+    <div class="widget-span widget-span-3-5">
+        <div class="widget-measure-container">
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Projects</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_projects">0.0</span></a>
+            </span>
+            </p>
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Files</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_files">0.0</span></a>
+            </span>
+            </p>
+        </div>
+    </div>
+    <div class="widget-span widget-span-3-5">
+        <div class="widget-measure-container">
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Lines of code</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_loc">0.0</span></a>
+            </span>
+            </p>
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Lines</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_lines">0.0</span></a>
+            </span>
+            </p>
+        </div>
+    </div>
+    <div class="widget-span widget-span-5">
+        <div class="widget-measure-container">
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Functions</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_functions">0.0</span></a>
+            </span>
+            </p>
+            <p class="widget-measure widget-measure-main">
+            <span class="widget-label">Classes</span>
+            <span class="nowrap">
+                <a href="" class="widget-link " rel="" title=""><span id="aggregate_classes">0.0</span></a>
+            </span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    var queryParams = [
+        'format=json',
+        'metrics=ncloc,files,lines,classes,functions'
+    ];
+    var query = queryParams.join('&');
+    var url = baseUrl + '/api/resources?' + query;
+
+    jQuery.ajax({
+        type: "GET",
+        url: url,
+        dataType:"json",
+        success: function(data, textStatus, jqXHR) {
+            var projects = 0;
+            var ncloc = 0.0;
+            var lines = 0.0;
+            var files = 0.0;
+            var classes = 0.0;
+            var functions = 0.0;
+
+            //Iterate over the projects
+            jQuery.each(data, function(index, element) {
+                projects = projects + 1;
+
+                //Gather the values
+                jQuery.each(element.msr, function(msr_index, msr_element){
+                    if (msr_element.key == "ncloc"){
+                        ncloc = ncloc + msr_element.val;
+                    } else if (msr_element.key == "lines"){
+                        lines = lines + msr_element.val;
+                    } else if (msr_element.key == "files"){
+                        files = files + msr_element.val;
+                    } else if (msr_element.key == "classes"){
+                        classes = classes + msr_element.val;
+                    } else if (msr_element.key == "functions"){
+                        functions = functions + msr_element.val;
+                    }
+                });
+            });
+
+            jQuery("#aggregate_projects").html("" + projects);
+            jQuery("#aggregate_loc").html("" + ncloc);
+            jQuery("#aggregate_functions").html("" + functions);
+            jQuery("#aggregate_files").html("" + files);
+            jQuery("#aggregate_classes").html("" + classes);
+            jQuery("#aggregate_lines").html("" + lines);
+        }
+    });
+})();
+</script>
+
+<%
+   filter_id = widget_properties['filter']
+   filter = MeasureFilter.find_by_id(filter_id.to_i) if filter_id
+   if filter
+     filter.load_criteria_from_data
+     if !filter.require_authentication? || logged_in?
+       filter.set_criteria_value('display', 'list')
+       filter.execute(self, :user => current_user)
+       @widget_title = link_to h(filter.name), {:controller => 'measures', :action => 'filter', :id => filter.id}
+%>
+    <%= render :partial => 'measures/display_list', :locals => {:edit_mode => false, :filter => filter, :widget_id => widget.id} -%>
+<%
+     end
+   else
+%>
+  <p>Error: Invalid filter</p>
+<%
+   end
+%>
+
+
