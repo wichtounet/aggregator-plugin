@@ -78,7 +78,7 @@
     var table = jQuery("#aggregate_fake table tbody");
 
     table.find('tr').each(function(i, el){
-        var project = $(this).find('td').eq(1).find('a').text();
+        var project = jQuery(this).find('td').eq(1).find('a').text();
 
         var queryParams = [
             'resource=' + project,
