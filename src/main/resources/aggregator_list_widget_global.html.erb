@@ -51,7 +51,7 @@
     </div>
 </div>
 
-<div style="display:none;">
+<div id="aggregate_fake" style="display:none;">
 <%
    filter_id = widget_properties['filter']
    filter = MeasureFilter.find_by_id(filter_id.to_i) if filter_id
@@ -75,49 +75,57 @@
 
 <script>
 (function () {
-    var queryParams = [
-        'format=json',
-        'metrics=ncloc,files,lines,classes,functions'
-    ];
-    var query = queryParams.join('&');
-    var url = baseUrl + '/api/resources?' + query;
+    var table = jQuery("#aggregate_fake table tbody");
 
-    jQuery.ajax({
-        type: "GET",
-        url: url,
-        dataType:"json",
-        success: function(data, textStatus, jqXHR) {
-            var ncloc = 0;
-            var lines = 0;
-            var files = 0;
-            var classes = 0;
-            var functions = 0;
+    table.find('tr').each(function(i, el){
+        var project = $(this).find('td').eq(1).find('a').text();
 
-            //Iterate over the projects
-            jQuery.each(data, function(index, element) {
-                //Gather the values
-                jQuery.each(element.msr, function(msr_index, msr_element){
-                    if (msr_element.key == "ncloc"){
-                        ncloc = ncloc + msr_element.val;
-                    } else if (msr_element.key == "lines"){
-                        lines = lines + msr_element.val;
-                    } else if (msr_element.key == "files"){
-                        files = files + msr_element.val;
-                    } else if (msr_element.key == "classes"){
-                        classes = classes + msr_element.val;
-                    } else if (msr_element.key == "functions"){
-                        functions = functions + msr_element.val;
-                    }
+        var queryParams = [
+            'resource=' + project,
+            'format=json',
+            'metrics=ncloc,files,lines,classes,functions'
+        ];
+
+        var query = queryParams.join('&');
+        var url = baseUrl + '/api/resources?' + query;
+
+        jQuery.ajax({
+            type: "GET",
+            url: url,
+            dataType:"json",
+            success: function(data, textStatus, jqXHR) {
+                var ncloc = 0;
+                var lines = 0;
+                var files = 0;
+                var classes = 0;
+                var functions = 0;
+
+                //Iterate over the projects
+                jQuery.each(data, function(index, element) {
+                    //Gather the values
+                    jQuery.each(element.msr, function(msr_index, msr_element){
+                        if (msr_element.key == "ncloc"){
+                            ncloc = ncloc + msr_element.val;
+                        } else if (msr_element.key == "lines"){
+                            lines = lines + msr_element.val;
+                        } else if (msr_element.key == "files"){
+                            files = files + msr_element.val;
+                        } else if (msr_element.key == "classes"){
+                            classes = classes + msr_element.val;
+                        } else if (msr_element.key == "functions"){
+                            functions = functions + msr_element.val;
+                        }
+                    });
                 });
-            });
 
-            jQuery("#aggregate_projects").html("" + (1 + parseInt(jQuery("#aggregate_projects").html())));
-            jQuery("#aggregate_loc").html("" + (ncloc + parseInt(jQuery("#aggregate_loc").html())));
-            jQuery("#aggregate_functions").html("" + (functions + parseInt(jQuery("#aggregate_functions").html())));
-            jQuery("#aggregate_files").html("" + (files + parseInt(jQuery("#aggregate_files").html())));
-            jQuery("#aggregate_classes").html("" + (classes + parseInt(jQuery("#aggregate_classes").html())));
-            jQuery("#aggregate_lines").html("" + (lines + parseInt(jQuery("#aggregate_lines").html())));
-        }
+                jQuery("#aggregate_projects").html("" + (1 + parseInt(jQuery("#aggregate_projects").html())));
+                jQuery("#aggregate_loc").html("" + (ncloc + parseInt(jQuery("#aggregate_loc").html())));
+                jQuery("#aggregate_functions").html("" + (functions + parseInt(jQuery("#aggregate_functions").html())));
+                jQuery("#aggregate_files").html("" + (files + parseInt(jQuery("#aggregate_files").html())));
+                jQuery("#aggregate_classes").html("" + (classes + parseInt(jQuery("#aggregate_classes").html())));
+                jQuery("#aggregate_lines").html("" + (lines + parseInt(jQuery("#aggregate_lines").html())));
+            }
+        });
     });
 })();
 </script>
